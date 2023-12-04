@@ -1,0 +1,38 @@
+scaricare i 3 moduli
+users
+moduloA
+moduloB
+
+lanciare i seguenti comandi su tutti e 3 i moduli
+
+- npm install
+- nest build
+- npm link
+
+npm link potrebbe richiedere i permessi di amministratore
+
+dopo, sul moduloB lanciare il seguente comando
+
+- npm link @pietro/modulo-a
+
+sul progetto principale (questo) lanciare il seguente comando
+
+- npm link @pietro/modulo-a @pietro/modulo-b @pietro/users
+
+per lanciare il progetto principale
+
+- npm run start:dev  
+
+Il comando npm link crea un collegamento simbolico (symlink) tra due pacchetti Node.js. Questo può essere utile per diversi motivi, ad esempio per testare una versione di sviluppo di un pacchetto in un altro progetto, o per condividere un pacchetto tra diversi progetti.
+
+quando lanciamo il primo 'npm link' senza nessun parametro, il nome del pacchetto viene preso dal package.json del modulo corrente
+
+lanciando 'npm ls --link --global' possiamo vedere tutti i pacchetti linkati globalmente
+
+per linkare pacchetti al progetto principale, bisogna lanciare il comando 'npm link nomepacchetto'.
+
+ATTENZIONE: ogni volta che si linka un nuovo pacchetto bisogna linkare tutti i pacchetti precedenti, altrimenti il link sparisce.
+
+per rimuovere un pacchetto linkato, bisogna lanciare il comando 'npm unlink nomepacchetto'
+
+ogni volta che si fa una modifica ai pacchetti bisogna rilanciare la build, altrimenti gli aggiornamenti non vengono presi in considerazione
