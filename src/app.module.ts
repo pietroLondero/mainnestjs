@@ -2,22 +2,35 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from '@pietro/user';
-import { UsersModule } from '@pietro/user'
+import { AuthModule, RolesModule } from '@pietro/auth';
+import { BlogModule } from '@pietro/blog';
+import { MongooseModule } from '@nestjs/mongoose';
+import { ProductsModule, CategoriesModule } from '@pietro/products';
+import { CommonModule } from '@pietro/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import typeorm from './config/typeorm';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'root',
-      database: 'test',
-      entities: [User],
-      synchronize: true,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [typeorm]
     }),
-    UsersModule
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => (configService.get('typeorm'))
+    }),
+    MongooseModule.forRoot('mongodb://localhost:27017', {
+      user: 'root',
+      pass: 'example',
+      dbName: 'nest',
+    }),
+    CommonModule,
+    AuthModule,
+    RolesModule,
+    BlogModule,
+    CategoriesModule,
+    ProductsModule
   ],
   controllers: [AppController],
   providers: [AppService],
